@@ -4,6 +4,9 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+Dir[File.dirname(__FILE__) + '/../lib/*.rb'].each {|file| require file }
+
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
@@ -14,4 +17,11 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+end
+
+def setup_dataset
+  raw_parsed_data = DataTools::token_file(File.dirname(__FILE__)+'/../data/parse_test.txt', ',')
+  ds_support = 2
+  DataSet.new(raw_parsed_data, ds_support)
+  
 end
