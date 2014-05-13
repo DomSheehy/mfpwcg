@@ -47,7 +47,14 @@ describe DataSet do
       dataset.add_and_support
       dataset.trim
       list = dataset.order_item_list
-      expect(list).to eq([{'a' => 4}, {'b'=>3}, {'c' => 2}, {'f' => 2}])
+      i = 0 
+      test_list = [ItemNode.new('a', 4), ItemNode.new('b', 3), 
+                            ItemNode.new('c', 2), ItemNode.new('f', 2)]
+      list.each do |node|
+        (node.item == test_list[i].item).should be(true)
+        (node.support == test_list[i].support).should be(true)
+        i += 1
+      end
     end
   end
 
@@ -56,7 +63,7 @@ describe DataSet do
       dataset = setup_dataset
       dataset.add_and_support
       dataset.trim      
-      expect(dataset.order_transactions).to eq([['a', 'b'], ['c'], ['f'], ['a', 'b', 'c'], ['a', 'f'], ['a', 'b']])
+      expect(dataset.order_transaction_items).to eq([['a', 'b'], ['c'], ['f'], ['a', 'b', 'c'], ['a', 'f'], ['a', 'b']])
     end
   end
 end

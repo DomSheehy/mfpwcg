@@ -20,10 +20,7 @@ class DataSet
     @item_list = {}
   end
 
-  def add_and_support
-    if !self.raw_transactions || self.raw_transactions.empty?
-      raise NoTransactionsError
-    end
+  def add_and_support    
     self.raw_transactions.each do |transaction|
       transaction.each do |item|
         if self.item_list[item.strip.downcase]
@@ -51,14 +48,14 @@ class DataSet
     ordered_array = ordered_array.compact.reverse.flatten
     ordered_item_list = []
     ordered_array.each do |item|
-      ordered_item_list << {item => self.item_list[item]}
+      ordered_item_list << ItemNode.new(item, self.item_list[item])
     end
     ordered_item_list
   end
 
-  def order_transactions
+  def order_transaction_items
     reduced_transaction_list = []
-    frequent_items = self.order_item_list.map{|item_and_support| item_and_support.keys}.flatten    
+    frequent_items = self.order_item_list.map{|item_node| item_node.item}
     self.raw_transactions.each do |transaction|
       reduced_transaction = []
       frequent_items.each do |item|
