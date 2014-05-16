@@ -18,20 +18,21 @@ class SubTreeNode
     self.support += 1
   end
 
-  def add_child(item)    
-    if self.children.nil?
+  def add_child(item)         
+    if children.nil?
       self.children = []
-      self.children << SubTreeNode.new(item, 1)
-      return
-    else
-      self.children.each do |child| 
-        if child.item == item
-          child.increase_support
-        else
-
-        end
+      child = SubTreeNode.new(item, 1, self)
+      self.children << child
+      return child
+    end     
+    self.children.each do |child|
+      if child.item == item
+        child.increase_support
+        return child
       end
-    end
-
+    end    
+    child = SubTreeNode.new(item, 1, self)
+    self.children << child
+    return child
   end
 end

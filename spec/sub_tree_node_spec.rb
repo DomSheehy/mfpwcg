@@ -61,7 +61,7 @@ describe SubTreeNode do
         @node.add_child(item)
       end
       @node.children.each do | child|
-        (children.include?(child)).should be(true)
+        (children.include?(child.item)).should be(true)
       end 
     end
   end

@@ -21,9 +21,11 @@ describe FPTree do
       @tree = FPTree.new(dataset)    
     end
     it "should add transactions from the dataset to the tree" do
-      @tree.grow_tree
-      @tree.root.children.size.should be(['a', 'c', 'f'].size)
-      (@tree.root.children.first == 'a').should be(true)
+      frequent_items = ['a', 'c','f']
+      @tree.grow_tree      
+      @tree.root.children.size.should be(frequent_items.size)
+      @tree.root.children.each{|child| (frequent_items.include?(child.item)).should be(true)}
+      
     end
   end
     

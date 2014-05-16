@@ -21,10 +21,15 @@ class FPTree
 
   def grow_tree
     self.dataset.order_transaction_items.each do |transaction|
-      transaction.each do |item|
-        root.add_child(item)
-      end      
+      add_transaction(transaction, self.root)      
     end
+  end
+  def add_transaction(transaction, parent)    
+    if transaction.empty?
+      return
+    end
+    added_child = parent.add_child(transaction.shift)
+    add_transaction(transaction, added_child)
   end
 
 end
