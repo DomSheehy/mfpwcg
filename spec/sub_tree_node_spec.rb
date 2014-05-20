@@ -65,4 +65,23 @@ describe SubTreeNode do
       end 
     end
   end
+  describe "#conditional_pattern" do
+    before do
+      @root = SubTreeNode.new(nil, 0)
+      @node = SubTreeNode.new('a', 1)
+      @child1 = SubTreeNode.new('b', 1)
+      @child2 = SubTreeNode.new('c', 1)
+      @root.children = [@node]
+      @node.children = [@child1]
+      @node.parent = @root
+      @child1.parent = @node
+      @child2.parent = @child1
+      @child1.children = [@child2]
+    end
+    it 'should give parents up to root' do
+      pattern = @child2.conditional_pattern
+      expect(pattern).to eq('a,b,c')
+    end
+  end
+
 end
