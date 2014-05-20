@@ -1,1 +1,1 @@
-rvm --create use ruby-2.1.0@mfpwgc
+rvm --create use ruby-2.1.2@mfpwgc
