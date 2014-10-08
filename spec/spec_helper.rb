@@ -20,14 +20,14 @@ RSpec.configure do |config|
 end
 
 def setup_dataset
-  raw_parsed_data = DataTools::token_file(File.dirname(__FILE__)+'/../data/parse_test.txt', ',')
-  ds_support = 2
-  DataSet.new(raw_parsed_data, ds_support)  
+  raw_parsed_data = DataTools::token_file(File.dirname(__FILE__)+'/../data/paperex.txt', ',')
+  ds_support = 3
+  DataSet.new(raw_parsed_data, ds_support)
 end
 
 def prepare_dataset
   ds = setup_dataset
   ds.add_and_support
-  ds.trim  
+  ds.trim
   ds
 end

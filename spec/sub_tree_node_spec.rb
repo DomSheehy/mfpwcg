@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SubTreeNode do
   describe "#create" do
     it 'should create a new node' do
-      node = SubTreeNode.new('cats', 0)      
+      node = SubTreeNode.new('cats', 0)
       expect(node.item).to eq("cats")
       node = SubTreeNode.new('cats', 0, SubTreeNode.new('cats',0,nil,nil),SubTreeNode.new('dogs',0,nil,nil))
       expect(node.parent.item).to eq("cats")
@@ -29,8 +29,8 @@ describe SubTreeNode do
       rescue => e
         expect(e.class).to eq(TypeError)
       end
-    end     
-  end  
+    end
+  end
   describe "#increase_support" do
     it 'should increase the support by one' do
       node = SubTreeNode.new('cats', 0)
@@ -44,17 +44,17 @@ describe SubTreeNode do
     before do
       @node = SubTreeNode.new('cats', 0)
     end
-    it 'should add a child to the node' do      
+    it 'should add a child to the node' do
       @node.add_child('a')
       (@node.children.first.item == 'a').should be(true)
       (@node.children.first.support == 1).should be(true)
     end
     it 'should detect a child and raise the support' do
-      2.times do 
+      2.times do
         @node.add_child('a')
       end
       (@node.children.first.support == 2).should be(true)
-    end    
+    end
     it 'should add a second child' do
       children = ['a', 'b']
       children.each do |item|
@@ -62,7 +62,7 @@ describe SubTreeNode do
       end
       @node.children.each do | child|
         (children.include?(child.item)).should be(true)
-      end 
+      end
     end
   end
   describe "#conditional_pattern" do
@@ -79,8 +79,8 @@ describe SubTreeNode do
       @child1.children = [@child2]
     end
     it 'should give parents up to root' do
-      pattern = @child2.conditional_pattern
-      expect(pattern).to eq('a,b,c')
+      pattern = @child2.conditional_pattern(false)
+      expect(pattern.join).to eq('abc')
     end
   end
 
