@@ -17,35 +17,48 @@ class DataSet
     end
     @raw_transactions = raw_transactions
     @support = support
-    @item_list = {}
+    @item_list = []
   end
 
   def add_and_support
+    current_prefix = []
     self.raw_transactions.each do |transaction|
       transaction.each do |item|
-        if self.item_list[item.strip.downcase]
-          self.item_list[item.strip.downcase] += 1
+        if found_index = search_item_list(item)
+          current_prefix << item
+          self.item_list[found_index].increase_support
         else
-          self.item_list[item.strip.downcase] = 1
+          new_item = ItemNode.new(item.strip.downcase, 1)
+          if current_prefix.empty?
+            self.item_list << new_item
+          else
+            previous_item = current_prefix.last
+            insert_index = search_item_list(previous_item)
+            self.item_list.insert(insert_index + 1, new_item)
+          end
         end
       end
+      current_prefix = []
     end
   end
-
+  def search_item_list(candidate_item)
+    self.item_list.find_index{|item_node| item_node.item == candidate_item}
+  end
   def trim
-    self.item_list.delete_if{|item, support| support < self.support}
+    self.item_list.delete_if{|item_node| item_node.support < self.support}
   end
   #returns an array of hashes, each has is the item and support
   def ordered_item_list(candidate_items = nil)
     ordered_array = []
-    self.item_list.each do |item, val|
-      if ordered_array[val]
-        ordered_array[val] << item
+    self.item_list.each do |item_node|
+      if ordered_array[item_node.support]
+        ordered_array[item_node.support] << item_node.item
       else
-        ordered_array[val] = [item]
+        ordered_array[item_node.support] = [item_node.item]
       end
     end
     local_ordered_items =  ordered_array.compact.reverse.flatten
+
     if candidate_items
       ordered_items = []
       candidate_items.each do |c_item|
@@ -54,12 +67,14 @@ class DataSet
         end
       end
     end
+
     ordered_items || local_ordered_items
   end
 
   def order_transaction_items(candidate_items = nil)
     reduced_transaction_list = []
     frequent_items = self.ordered_item_list(candidate_items)
+    puts "#{frequent_items}"
     self.raw_transactions.each do |transaction|
       reduced_transaction = []
       frequent_items.each do |item|

@@ -22,7 +22,7 @@ describe DataSet do
   end
 
   describe '#add_and_support' do
-    it "should ad raw data to the data set's item nodes" do
+    it "should add raw data to the data set's item nodes" do
       dataset = setup_dataset
       dataset.add_and_support
       expect(dataset.item_list['a']).to eq(3)
@@ -48,9 +48,9 @@ describe DataSet do
       dataset.trim
       list = dataset.ordered_item_list
       i = 0
-      test_list = ["f", "c", "a", "m", "p", "b"]
+      test_list = ["f", "c", "a", "b", "m", "p"]
       list.each do |node|
-        (node == test_list[i]).should be(true)
+        (node).should eq(test_list[i])
         i += 1
       end
     end
@@ -63,9 +63,9 @@ describe DataSet do
       dataset.trim
       expect(dataset.order_transaction_items).to eq(
         [["f", "c", "a", "m", "p"],
-         ["f", "c", "a", "m", "b"],
+         ["f", "c", "a", "b", "m"],
          ["f", "b"],
-         ["c", "p", "b"],
+         ["c", "b", "p"],
          ["f", "c", "a", "m", "p"]])
     end
   end
