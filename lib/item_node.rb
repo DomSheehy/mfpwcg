@@ -13,4 +13,16 @@ class ItemNode
   def increase_support
     @support += 1
   end
+
+  def decrease_support
+    @support -= 1
+  end
+
+  def ==(other_node)
+    other_node.class == self.class &&
+    other_node.support == self.support &&
+    other_node.item == self.item
+
+  end
+
 end

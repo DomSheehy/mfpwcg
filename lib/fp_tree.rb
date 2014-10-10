@@ -7,7 +7,7 @@ class FPTree
       raise TypeError
     end
     @dataset, @candidate_items = FPTree.prepare_dataset(dataset, candidate_items)
-    @root = SubTreeNode.new(nil,0)
+    @root = SubTreeNode.new(ItemNode.new(nil,0))
     @header_table = create_header_table(@dataset.ordered_item_list(@candidate_items))
   end
 
@@ -17,21 +17,19 @@ class FPTree
     if candidate_items.nil?
       candidate_items = dataset.ordered_item_list
     end
-    puts "#{dataset.item_list}"
     [dataset, candidate_items]
   end
 
   def create_header_table(frequent_items)
     headers = []
     frequent_items.each do | item_node |
-      headers << SubTreeNode.new(item_node, 0 )
+      headers << SubTreeNode.new(ItemNode.new(item_node, 0 ))
     end
     self.header_table = headers
   end
 
   def grow_tree
     self.dataset.order_transaction_items(self.candidate_items).each do |transaction|
-      puts "#{transaction}"
       add_transaction(transaction, self.root)
     end
     self.calculate_header_support
@@ -68,7 +66,7 @@ class FPTree
       return current_pattern_base
     end
     current_link.support.times do
-      current_pattern_base << current_link.conditional_pattern(trim)
+      current_pattern_base << current_link.parent.conditional_pattern(trim)
     end
     self.conditional_pattern_base(trim, current_link.link, current_pattern_base)
   end
@@ -105,9 +103,7 @@ class FPTree
   def self.fp_growth(tree, pattern = '')
     frequent_patterns = []
     if tree.has_single_path?
-      if tree.header_table.size > 1
-        frequent_patterns << {pattern => tree.header_table.last.link.parent.conditional_pattern(true)}
-      end
+      frequent_patterns << tree.
     else
       tree.header_table.reverse.each do |header|
         if header.support > 0

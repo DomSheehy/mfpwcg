@@ -1,25 +1,38 @@
 class SubTreeNode
-  attr_accessor :item, :support, :parent, :link, :children
+  attr_accessor :item_node, :parent, :link, :children
 
-  def initialize(item, support = 0, parent = nil, link = nil, children = nil)
-    if (item && item.class != String) || (support && support.class != Fixnum) ||
+  def initialize(item_node, parent = nil, link = nil, children = nil)
+    if (item_node && item_node.class != ItemNode) ||
         (parent && parent.class != SubTreeNode) || (link && link.class != SubTreeNode) ||
         (children && children.class != Array)
       raise TypeError
     end
-    @item = item
-    @support = support
+    @item_node = item_node
     @parent = parent
     @link = link
     @children = children
   end
 
+  def support
+    self.item_node.support
+  end
+
+  def item
+    self.item_node.item
+  end
+
   def increase_support
-    self.support += 1
+    self.item_node.increase_support
   end
+
   def decrease_support
-    self.support -= 1
+    self.item_node.increase_support
   end
+
+  def support=(support)
+    self.item_node.support = support
+  end
+
   def link_depth(depth = 0)
     if self.link.nil?
       return depth
@@ -37,7 +50,7 @@ class SubTreeNode
   def add_child(item)
     if self.children.nil?
       self.children = []
-      new_child = SubTreeNode.new(item, 1, self)
+      new_child = SubTreeNode.new(ItemNode.new(item, 1), self)
       self.children << new_child
       return new_child
     end
@@ -47,7 +60,7 @@ class SubTreeNode
         return child
       end
     end
-    child = SubTreeNode.new(item, 1, self)
+    child = SubTreeNode.new(ItemNode.new(item, 1), self)
     self.children << child
     child
   end
@@ -66,7 +79,7 @@ class SubTreeNode
       return current_pattern.reverse
     end
     self.decrease_support if trim
-    self.parent.conditional_pattern(trim, current_pattern << self.item)
+    self.parent.conditional_pattern(trim, current_pattern << ItemNode.new(self.item, 1))
   end
 
   def prune

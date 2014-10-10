@@ -25,7 +25,8 @@ describe DataSet do
     it "should add raw data to the data set's item nodes" do
       dataset = setup_dataset
       dataset.add_and_support
-      expect(dataset.item_list['a']).to eq(3)
+      item_index = dataset.search_item_list('a')
+      expect(dataset.item_list[item_index].support).to eq(3)
      end
   end
 
@@ -33,11 +34,15 @@ describe DataSet do
     it "should trim items without the minimum support" do
       dataset = setup_dataset
       dataset.add_and_support
-      expect(dataset.item_list['a']).to eq(3)
-      expect(dataset.item_list['e']).to eq(1)
+      item_index = dataset.search_item_list('a')
+      expect(dataset.item_list[item_index].support).to eq(3)
+      item_index = dataset.search_item_list('e')
+      expect(dataset.item_list[item_index].support).to eq(1)
       dataset.trim
-      expect(dataset.item_list['a']).to eq(3)
-      expect(dataset.item_list['e']).to eq(nil)
+      item_index = dataset.search_item_list('a')
+      expect(dataset.item_list[item_index].support).to eq(3)
+      item_index = dataset.search_item_list('e')
+      expect(item_index).to be(nil)
      end
   end
 

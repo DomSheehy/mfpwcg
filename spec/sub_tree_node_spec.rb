@@ -3,29 +3,31 @@ require 'spec_helper'
 describe SubTreeNode do
   describe "#create" do
     it 'should create a new node' do
-      node = SubTreeNode.new('cats', 0)
-      expect(node.item).to eq("cats")
-      node = SubTreeNode.new('cats', 0, SubTreeNode.new('cats',0,nil,nil),SubTreeNode.new('dogs',0,nil,nil))
+      cat_item = ItemNode.new('cats', 0)
+      dog_item = ItemNode.new('dogs', 0)
+      node = SubTreeNode.new(cat_item)
+      expect(node.item_node.item).to eq("cats")
+      node = SubTreeNode.new(cat_item,  SubTreeNode.new(cat_item,nil,nil),SubTreeNode.new(dog_item,nil,nil))
       expect(node.parent.item).to eq("cats")
       expect(node.link.item).to eq("dogs")
     end
     it 'should raise an error if the data types are wrong' do
       begin
-        node = SubTreeNode.new(0, 'cats')
+        node = SubTreeNode.new('cat')
       rescue => e
         expect(e.class).to eq(TypeError)
       end
     end
     it 'should raise an error if the the node isnt a node' do
       begin
-        node = SubTreeNode.new('cats', 0, 'dog', SubTreeNode.new('cats',0,nil,nil))
+        node = SubTreeNode.new(ItemNode.new('cat', 0), 'dog', SubTreeNode.new('cats',0,nil,nil))
       rescue => e
         expect(e.class).to eq(TypeError)
       end
     end
     it 'should raise an error if the the link isnt a link' do
       begin
-        node = SubTreeNode.new('cats', 0, SubTreeNode.new('cats',0,nil,nil), 'doge' )
+        node = SubTreeNode.new(ItemNode.new('cat', 0), SubTreeNode.new('cats',0,nil,nil), 'doge' )
       rescue => e
         expect(e.class).to eq(TypeError)
       end
@@ -33,7 +35,7 @@ describe SubTreeNode do
   end
   describe "#increase_support" do
     it 'should increase the support by one' do
-      node = SubTreeNode.new('cats', 0)
+      node = SubTreeNode.new(ItemNode.new('cat', 0))
       expect(node.support).to be(0)
       node.increase_support
       expect(node.support).to be(1)
@@ -42,7 +44,7 @@ describe SubTreeNode do
 
   describe "#add_child" do
     before do
-      @node = SubTreeNode.new('cats', 0)
+      @node = SubTreeNode.new(ItemNode.new('cat', 0))
     end
     it 'should add a child to the node' do
       @node.add_child('a')
@@ -67,20 +69,22 @@ describe SubTreeNode do
   end
   describe "#conditional_pattern" do
     before do
-      @root = SubTreeNode.new(nil, 0)
-      @node = SubTreeNode.new('a', 1)
-      @child1 = SubTreeNode.new('b', 1)
-      @child2 = SubTreeNode.new('c', 1)
+      root, a, b, c, = ItemNode.new(nil, 0), ItemNode.new('a', 1), ItemNode.new('b', 1), ItemNode.new('c', 1)
+      @root = SubTreeNode.new(root)
+      @node = SubTreeNode.new(a)
+      @child1 = SubTreeNode.new(b)
+      @child2 = SubTreeNode.new(c)
       @root.children = [@node]
       @node.children = [@child1]
       @node.parent = @root
       @child1.parent = @node
       @child2.parent = @child1
       @child1.children = [@child2]
+      @result = [a, b, c]
     end
     it 'should give parents up to root' do
       pattern = @child2.conditional_pattern(false)
-      expect(pattern.join).to eq('abc')
+      expect(pattern).to eq(@result)
     end
   end
 
