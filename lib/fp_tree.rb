@@ -65,12 +65,20 @@ class FPTree
       self.calculate_header_support if trim
       return current_pattern_base
     end
-    current_link.support.times do
-      current_pattern_base << current_link.parent.conditional_pattern(trim)
-    end
+    current_pattern_base << current_link.parent.conditional_pattern(trim, current_link.support)
     self.conditional_pattern_base(trim, current_link.link, current_pattern_base)
   end
 
+  # def conditional_pattern_base(trim, current_link, current_pattern_base)
+  #   transaction_set = self.conditional_pattern_transactions(trim, current_link, current_pattern_base)
+  #   if transaction_set.size > 1
+  #     current_t = transaction_set.shift
+  #     transaction_set.each do | set |
+
+  #     end
+  #   end
+
+  # end
   def has_single_path?
     if self.header_table.size > 0
       self.header_table.each do |header|
@@ -103,7 +111,7 @@ class FPTree
   def self.fp_growth(tree, pattern = '')
     frequent_patterns = []
     if tree.has_single_path?
-      frequent_patterns << tree.
+      # frequent_patterns << tree.
     else
       tree.header_table.reverse.each do |header|
         if header.support > 0

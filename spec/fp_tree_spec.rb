@@ -54,8 +54,10 @@ describe FPTree do
     it "should return count and patterns of each link" do
       collect_item = @tree.header_table.reverse.first
       item_base = @tree.conditional_pattern_base(true,collect_item.link)
-      expected_base = [[ItemNode.new('f', 2),ItemNode.new('c', 2),ItemNode.new('a', 2),ItemNode.new('m', 2)],
-                        [ItemNode.new('c', 1),ItemNode.new('b', 1)]]
+      first_pattern = [ItemNode.new('f', 2),ItemNode.new('c', 2),ItemNode.new('a', 2),ItemNode.new('m', 2)]
+      second_pattern = [ItemNode.new('c', 1),ItemNode.new('b', 1)]
+      expected_base = [first_pattern,
+                        second_pattern]
       expect(item_base.size).to be(2)
       (first_pattern).should eq(item_base[0])
       (second_pattern).should eq(item_base[1])
@@ -72,10 +74,9 @@ describe FPTree do
       @item_base = @tree.conditional_pattern_base(true,@collect_item.link)
     end
     it "should return some frequent patterns" do
-      new_data = DataSet.new(@item_base, @tree.dataset.support)
-      new_data.add_and_support
-      new_data.trim
-      puts "new data set freqs #{new_data.ordered_item_list}"
+      new_data = DataSet.new([])
+      new_data.item_list = @item_base
+      puts "new data set freqs #{@item_base}"
       conditional_tree = FPTree.new(new_data)
       conditional_tree.grow_tree
       apatterns = FPTree.fp_growth(conditional_tree) #should just be 'c'

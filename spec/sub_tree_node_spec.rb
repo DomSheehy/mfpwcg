@@ -83,7 +83,7 @@ describe SubTreeNode do
       @result = [a, b, c]
     end
     it 'should give parents up to root' do
-      pattern = @child2.conditional_pattern(false)
+      pattern = @child2.conditional_pattern(false, @child2.support)
       expect(pattern).to eq(@result)
     end
   end

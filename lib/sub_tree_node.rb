@@ -25,8 +25,8 @@ class SubTreeNode
     self.item_node.increase_support
   end
 
-  def decrease_support
-    self.item_node.increase_support
+  def decrease_support(decrease_by = 1)
+    self.item_node.decrease_support(decrease_by)
   end
 
   def support=(support)
@@ -74,12 +74,12 @@ class SubTreeNode
     end
   end
 
-  def conditional_pattern(trim, current_pattern = [])
+  def conditional_pattern(trim, decrease_num, current_pattern = [])
     if self.parent.nil? && self.item.nil?
       return current_pattern.reverse
     end
-    self.decrease_support if trim
-    self.parent.conditional_pattern(trim, current_pattern << ItemNode.new(self.item, 1))
+    self.decrease_support(decrease_num) if trim
+    self.parent.conditional_pattern(trim, decrease_num, current_pattern << ItemNode.new(self.item, decrease_num))
   end
 
   def prune
