@@ -50,18 +50,17 @@ describe FPTree do
       dataset = setup_dataset
       @tree = FPTree.new(dataset)
       @tree.grow_tree
+      collect_item = @tree.header_table.reverse.first
+      @item_base = @tree.conditional_pattern_base(true,collect_item.link)
+      @first_pattern = [ItemNode.new('f', 2),ItemNode.new('c', 2),ItemNode.new('a', 2),ItemNode.new('m', 2)]
+      @second_pattern = [ItemNode.new('c', 1),ItemNode.new('b', 1)]
+      @new_conditional = ItemNode.new('c', 3)
     end
     it "should return count and patterns of each link" do
-      collect_item = @tree.header_table.reverse.first
-      item_base = @tree.conditional_pattern_base(true,collect_item.link)
-      first_pattern = [ItemNode.new('f', 2),ItemNode.new('c', 2),ItemNode.new('a', 2),ItemNode.new('m', 2)]
-      second_pattern = [ItemNode.new('c', 1),ItemNode.new('b', 1)]
-      expected_base = [first_pattern,
-                        second_pattern]
-      expect(item_base.size).to be(2)
-      (first_pattern).should eq(item_base[0])
-      (second_pattern).should eq(item_base[1])
 
+      expect(@item_base.size).to be(2)
+      (@first_pattern).should eq(@item_base[0])
+      (@second_pattern).should eq(@item_base[1])
     end
   end
 
@@ -71,18 +70,25 @@ describe FPTree do
       @tree = FPTree.new(dataset)
       @tree.grow_tree
       @collect_item = @tree.header_table.reverse.first #should be 'p' the last item
-      @item_base = @tree.conditional_pattern_base(true,@collect_item.link)
+      @item_base = @tree.conditional_pattern_base(false,@collect_item.link)
+
     end
     it "should return some frequent patterns" do
-      new_data = DataSet.new([])
-      new_data.item_list = @item_base
-      puts "new data set freqs #{@item_base}"
+      new_data = DataSet.new(DataSet.transactions_from_pattern_base(@item_base), @tree.dataset.support)
       conditional_tree = FPTree.new(new_data)
       conditional_tree.grow_tree
-      apatterns = FPTree.fp_growth(conditional_tree) #should just be 'c'
+      puts "#{conditional_tree.header_table}"
+      apatterns = FPTree.fp_growth(conditional_tree, @collect_item.item) #should just be 'c'
       puts "#{@collect_item.item} | #{apatterns}"
-      (apatterns).should eq([ItemNode.new('c', 3)])
+      (apatterns).should eq(["cp"])
 
+    end
+    it "Should return all the patterns" do
+      puts "#{FPTree.fp_growth(@tree)}"
+    end
+    it "should draw the tree" do
+      puts "#{@tree.dataset.order_transaction_items}"
+      @tree.print_tree
     end
   end
 

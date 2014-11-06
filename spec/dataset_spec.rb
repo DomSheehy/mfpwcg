@@ -74,4 +74,17 @@ describe DataSet do
          ["f", "c", "a", "m", "p"]])
     end
   end
+  describe '#transactions_from_pattern_base' do
+    before do
+      first_pattern = [ItemNode.new('f', 2),ItemNode.new('c', 2),ItemNode.new('a', 2),ItemNode.new('m', 2)]
+      second_pattern = [ItemNode.new('c', 1),ItemNode.new('b', 1)]
+      @conditional_pattern = [first_pattern, second_pattern]
+      first_pattern_result = [['f','c','a','m'],['f','c','a','m']]
+      second_pattern_result = ['c','b']
+      @expected_result = first_pattern_result << second_pattern_result
+    end
+    it 'will return a set of transactions based on the conditional pattern base' do
+      expect(DataSet.transactions_from_pattern_base(@conditional_pattern)).to eq(@expected_result)
+    end
+  end
 end

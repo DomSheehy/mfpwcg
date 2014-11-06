@@ -87,7 +87,6 @@ class SubTreeNode
   end
 
   def remove_child(node)
-    self.print_children
     self.children.each do |child|
       if child.item == node.item
         child = nil
@@ -96,16 +95,22 @@ class SubTreeNode
     self.children.compact!
   end
 
-  def print_children
-    puts "["
-    self.children.each do |child|
-      if child
-        puts "#{child.item}:#{child.support}"
-      else
-        puts "nil"
+  def print_node(depth = 1)
+    print "\t- #{item_node.item} : #{item_node.support} -"
+    if children
+      i = 0
+      self.children.each do |child|
+        child.print_node(depth + 1)
+        i += 1
+        if i < children.length
+          print "\n #{depth}"
+          0..depth.times {print "\t\t\t\t"}
+          print "|"
+        else
+          puts ""
+        end
       end
     end
-    puts "]"
   end
 
 end

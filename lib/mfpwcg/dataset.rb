@@ -85,4 +85,20 @@ class DataSet
     reduced_transaction_list
   end
 
+  def self.transactions_from_pattern_base(conditional_pattern)
+    transactions = []
+    conditional_pattern.each do |pattern|
+      if pattern.first
+        0..pattern.first.support.times do
+          pattern_items = []
+          pattern.each do |item|
+            pattern_items << item.item
+          end
+          transactions << pattern_items
+        end
+      end
+    end
+    transactions
+  end
+
 end

@@ -69,16 +69,6 @@ class FPTree
     self.conditional_pattern_base(trim, current_link.link, current_pattern_base)
   end
 
-  # def conditional_pattern_base(trim, current_link, current_pattern_base)
-  #   transaction_set = self.conditional_pattern_transactions(trim, current_link, current_pattern_base)
-  #   if transaction_set.size > 1
-  #     current_t = transaction_set.shift
-  #     transaction_set.each do | set |
-
-  #     end
-  #   end
-
-  # end
   def has_single_path?
     if self.header_table.size > 0
       self.header_table.each do |header|
@@ -111,27 +101,28 @@ class FPTree
   def self.fp_growth(tree, pattern = '')
     frequent_patterns = []
     if tree.has_single_path?
-      # frequent_patterns << tree.
+      link = tree.header_table.reverse.first.link
+
+      single_pattern = link.parent.conditional_pattern(true, tree.dataset.support, [ItemNode.new(link.item, link.support)])
+      puts "first link: #{pattern}"
+      frequent_patterns << single_pattern.map{|node| node.item}.join('')+pattern
     else
       tree.header_table.reverse.each do |header|
-        if header.support > 0
-          puts "header: #{header.item}"
-          puts "table info: #{tree.get_header_depths_and_supports}"
-          conditional_patterns = tree.conditional_pattern_base(false, header.link)
-          puts "#{conditional_patterns}"
-          conditional_dataset = DataSet.new(conditional_patterns, tree.dataset.support)
-          conditional_tree = FPTree.new(conditional_dataset, tree.candidate_items)
-          conditional_tree.grow_tree
-          pattern = header.item
-          conditional_tree.prune_tree
-          if conditional_tree.header_table.size > 0
-            frequent_patterns << FPTree.fp_growth(conditional_tree, pattern )
-          end
+        puts "processing #{header.item}  #{header.support} #{header.link}"
+        frequent_patterns << header.item + pattern
+        conditional_patterns = tree.conditional_pattern_base(false, header.link)
+        conditional_dataset = DataSet.new(DataSet.transactions_from_pattern_base(conditional_patterns), tree.dataset.support)
+        conditional_tree = FPTree.new(conditional_dataset, tree.candidate_items)
+        conditional_tree.grow_tree
+        puts "condtree:"
+        conditional_tree.print_tree
+        if conditional_tree.header_table.size > 0
+          frequent_patterns << FPTree.fp_growth(conditional_tree, header.item + pattern )
         end
       end
     end
     puts "feqs #{frequent_patterns}"
-    frequent_patterns
+    frequent_patterns.flatten.uniq
   end
 
   def get_header_depths_and_supports
@@ -146,6 +137,13 @@ class FPTree
       if item == header.item
         return header
       end
+    end
+  end
+  def print_tree
+    if root.children
+      puts " - root : #{root.children.length} - "
+      root.children.each{|child| child.print_node}
+      puts ""
     end
   end
 end

@@ -5,7 +5,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-Dir[File.dirname(__FILE__) + '/../lib/*.rb'].each {|file| require file }
+require "#{File.dirname(__FILE__) + '/../lib/mfpwcg'}"
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
