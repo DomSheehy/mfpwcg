@@ -1,3 +1,6 @@
+#This class represents a leaf in the fp tree. A node!
+## Item node is the item and support of this leaf
+## The parent link and children are other nodes making up the tree
 class SubTreeNode
   attr_accessor :item_node, :parent, :link, :children
 

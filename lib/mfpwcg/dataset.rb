@@ -74,7 +74,6 @@ class DataSet
   def order_transaction_items(candidate_items = nil)
     reduced_transaction_list = []
     frequent_items = self.ordered_item_list(candidate_items)
-    #puts "#{frequent_items}"
     self.raw_transactions.each do |transaction|
       reduced_transaction = []
       frequent_items.each do |item|

@@ -77,9 +77,7 @@ describe FPTree do
       new_data = DataSet.new(DataSet.transactions_from_pattern_base(@item_base), @tree.dataset.support)
       conditional_tree = FPTree.new(new_data)
       conditional_tree.grow_tree
-      puts "#{conditional_tree.header_table}"
       apatterns = FPTree.fp_growth(conditional_tree, @collect_item.item) #should just be 'c'
-      puts "#{@collect_item.item} | #{apatterns}"
       (apatterns).should eq(["cp"])
 
     end
@@ -87,7 +85,6 @@ describe FPTree do
       puts "#{FPTree.fp_growth(@tree)}"
     end
     it "should draw the tree" do
-      puts "#{@tree.dataset.order_transaction_items}"
       @tree.print_tree
     end
   end
