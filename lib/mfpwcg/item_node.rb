@@ -20,8 +20,8 @@ class ItemNode
 
   def ==(other_node)
     other_node.class == self.class &&
-    other_node.support == support &&
-    other_node.item == item
+    other_node.support == self.support &&
+    other_node.item == self.item
 
   end
 

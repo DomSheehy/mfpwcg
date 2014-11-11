@@ -17,92 +17,92 @@ class SubTreeNode
   end
 
   def support
-    item_node.support
+    self.item_node.support
   end
 
   def item
-    item_node.item
+    self.item_node.item
   end
 
   def increase_support
-    item_node.increase_support
+    self.item_node.increase_support
   end
 
   def decrease_support(decrease_by = 1)
-    item_node.decrease_support(decrease_by)
+    self.item_node.decrease_support(decrease_by)
   end
 
   def support=(support)
-    item_node.support = support
+    self.item_node.support = support
   end
 
   def link_depth(depth = 0)
-    if link.nil?
+    if self.link.nil?
       return depth
     end
-    link.link_depth(depth + 1)
+    self.link.link_depth(depth + 1)
   end
 
   def item_support(total_support = 0)
-    if link.nil?
-      return support + total_support
+    if self.link.nil?
+      return self.support + total_support
     end
-    link.item_support(support + total_support)
+    self.link.item_support(self.support + total_support)
   end
 
   def add_child(item)
-    if children.nil?
-      children = []
+    if self.children.nil?
+      self.children = []
       new_child = SubTreeNode.new(ItemNode.new(item, 1), self)
-      children << new_child
+      self.children << new_child
       return new_child
     end
-    children.each do |child|
+    self.children.each do |child|
       if child.item == item
         child.increase_support
         return child
       end
     end
     child = SubTreeNode.new(ItemNode.new(item, 1), self)
-    children << child
+    self.children << child
     child
   end
 
   def add_link(new_link)
-    if link.nil?
-      link = new_link
+    if self.link.nil?
+      self.link = new_link
       return
     else
-      link.add_link(new_link)
+      self.link.add_link(new_link)
     end
   end
 
   def conditional_pattern(trim, decrease_num, current_pattern = [])
-    if parent.nil? && item.nil?
+    if self.parent.nil? && self.item.nil?
       return current_pattern.reverse
     end
-    decrease_support(decrease_num) if trim
-    parent.conditional_pattern(trim, decrease_num, current_pattern << ItemNode.new(item, decrease_num))
+    self.decrease_support(decrease_num) if trim
+    self.parent.conditional_pattern(trim, decrease_num, current_pattern << ItemNode.new(self.item, decrease_num))
   end
 
   def prune
-    parent.remove_child(self)
+    self.parent.remove_child(self)
   end
 
   def remove_child(node)
-    children.each do |child|
+    self.children.each do |child|
       if child.item == node.item
         child = nil
       end
     end
-    children.compact!
+    self.children.compact!
   end
 
   def print_node(depth = 1)
     print "\t- #{item_node.item} : #{item_node.support} -"
     if children
       i = 0
-      children.each do |child|
+      self.children.each do |child|
         child.print_node(depth + 1)
         i += 1
         if i < children.length
