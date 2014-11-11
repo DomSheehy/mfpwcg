@@ -2,4 +2,4 @@ language: ruby
 rvm:
   - 2.1.2
 before_script:
-  - bundle exec rubocop -fo > rubocop.log
+  - bundle exec rubocop -fo > rubocop.log || 0
