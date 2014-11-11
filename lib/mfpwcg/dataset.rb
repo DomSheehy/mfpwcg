@@ -23,7 +23,8 @@ class DataSet
     current_prefix = []
     raw_transactions.each do |transaction|
       transaction.each do |item|
-        if found_index = search_item_list(item)
+        found_index = search_item_list(item)
+        if found_index
           current_prefix << item
           item_list[found_index].increase_support
         else
