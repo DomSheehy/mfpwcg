@@ -90,18 +90,24 @@ class FPTree
     end
   end
 
-  # The fp growth harvests the tree for frequent patterns. It creates conditional trees based on the items conditional patterns
+  # The fp growth harvests the tree for frequent patterns. It creates conditional
+  # trees based on the items conditional patterns
   def self.fp_growth(tree, pattern = '')
     frequent_patterns = []
     if tree.has_single_path?
       link = tree.header_table.reverse.first.link # the least frequent item
-      single_pattern = link.parent.conditional_pattern(true, tree.dataset.support, [ItemNode.new(link.item, link.support)])
+      single_pattern = link.parent.conditional_pattern(true,
+                                                       tree.dataset.support,
+                                                       [ItemNode.new(link.item, link.support)])
+
       frequent_patterns << single_pattern.map(&:item).join('') + pattern
     else
       tree.header_table.reverse.each do |header| # the least frequent item
         frequent_patterns << header.item + pattern
         conditional_patterns = tree.conditional_pattern_base(false, header.link)
-        conditional_dataset = DataSet.new(DataSet.transactions_from_pattern_base(conditional_patterns), tree.dataset.support)
+        conditional_dataset = DataSet.new(DataSet.transactions_from_pattern_base(conditional_patterns),
+                                          tree.dataset.support)
+
         conditional_tree = FPTree.new(conditional_dataset, tree.candidate_items)
         conditional_tree.grow_tree
         if conditional_tree.header_table.size > 0
