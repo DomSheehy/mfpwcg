@@ -3,11 +3,10 @@ class ItemNode
 
   def initialize(item, support)
     if (item && item.class != String) || (support && support.class != Fixnum)
-      raise TypeError
+      fail TypeError
     end
     @item = item
     @support = support
-
   end
 
   def increase_support
@@ -20,9 +19,7 @@ class ItemNode
 
   def ==(other_node)
     other_node.class == self.class &&
-    other_node.support == self.support &&
-    other_node.item == self.item
-
+      other_node.support == support &&
+      other_node.item == item
   end
-
 end

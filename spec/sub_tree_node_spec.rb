@@ -7,7 +7,7 @@ describe SubTreeNode do
       dog_item = ItemNode.new('dogs', 0)
       node = SubTreeNode.new(cat_item)
       expect(node.item_node.item).to eq('cats')
-      node = SubTreeNode.new(cat_item,  SubTreeNode.new(cat_item,nil,nil),SubTreeNode.new(dog_item,nil,nil))
+      node = SubTreeNode.new(cat_item,  SubTreeNode.new(cat_item, nil, nil), SubTreeNode.new(dog_item, nil, nil))
       expect(node.parent.item).to eq('cats')
       expect(node.link.item).to eq('dogs')
     end
@@ -20,14 +20,14 @@ describe SubTreeNode do
     end
     it 'should raise an error if the the node isnt a node' do
       begin
-        node = SubTreeNode.new(ItemNode.new('cat', 0), 'dog', SubTreeNode.new('cats',0,nil,nil))
+        node = SubTreeNode.new(ItemNode.new('cat', 0), 'dog', SubTreeNode.new('cats', 0, nil, nil))
       rescue => e
         expect(e.class).to eq(TypeError)
       end
     end
     it 'should raise an error if the the link isnt a link' do
       begin
-        node = SubTreeNode.new(ItemNode.new('cat', 0), SubTreeNode.new('cats',0,nil,nil), 'doge' )
+        node = SubTreeNode.new(ItemNode.new('cat', 0), SubTreeNode.new('cats', 0, nil, nil), 'doge')
       rescue => e
         expect(e.class).to eq(TypeError)
       end
@@ -58,7 +58,7 @@ describe SubTreeNode do
       (@node.children.first.support == 2).should be(true)
     end
     it 'should add a second child' do
-      children = ['a', 'b']
+      children = %w(a b)
       children.each do |item|
         @node.add_child(item)
       end

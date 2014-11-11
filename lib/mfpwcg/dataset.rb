@@ -1,4 +1,4 @@
-#This class will represent a dataset, something that keeps track of
+# This class will represent a dataset, something that keeps track of
 # frequent items and their supports.
 # This class will start with a raw transaction list
 # This class will then count the frequency an item appears in each transaction of the transaction list
@@ -10,10 +10,10 @@
 class DataSet
   attr_accessor :raw_transactions, :item_list, :support
 
-  #Assume that raw_transactions is an array of arrays of strings, support is a fixnum(int)
+  # Assume that raw_transactions is an array of arrays of strings, support is a fixnum(int)
   def initialize(raw_transactions, support = 0)
-    if(raw_transactions.class != Array || support.class != Fixnum)
-      raise TypeError
+    if raw_transactions.class != Array || support.class != Fixnum
+      fail TypeError
     end
     @raw_transactions = raw_transactions
     @support = support
@@ -22,35 +22,37 @@ class DataSet
 
   def add_and_support
     current_prefix = []
-    self.raw_transactions.each do |transaction|
+    raw_transactions.each do |transaction|
       transaction.each do |item|
         if found_index = search_item_list(item)
           current_prefix << item
-          self.item_list[found_index].increase_support
+          item_list[found_index].increase_support
         else
           new_item = ItemNode.new(item.strip.downcase, 1)
           if current_prefix.empty?
-            self.item_list << new_item
+            item_list << new_item
           else
             previous_item = current_prefix.last
             insert_index = search_item_list(previous_item)
-            self.item_list.insert(insert_index + 1, new_item)
+            item_list.insert(insert_index + 1, new_item)
           end
         end
       end
       current_prefix = []
     end
   end
+
   def search_item_list(candidate_item)
-    self.item_list.find_index{|item_node| item_node.item == candidate_item}
+    item_list.find_index { |item_node| item_node.item == candidate_item }
   end
+
   def trim
-    self.item_list.delete_if{|item_node| item_node.support < self.support}
+    item_list.delete_if { |item_node| item_node.support < support }
   end
-  #returns an array of hashes, each has is the item and support
+  # returns an array of hashes, each has is the item and support
   def ordered_item_list(candidate_items = nil)
     ordered_array = []
-    self.item_list.each do |item_node|
+    item_list.each do |item_node|
       if ordered_array[item_node.support]
         ordered_array[item_node.support] << item_node.item
       else
@@ -73,8 +75,8 @@ class DataSet
 
   def order_transaction_items(candidate_items = nil)
     reduced_transaction_list = []
-    frequent_items = self.ordered_item_list(candidate_items)
-    self.raw_transactions.each do |transaction|
+    frequent_items = ordered_item_list(candidate_items)
+    raw_transactions.each do |transaction|
       reduced_transaction = []
       frequent_items.each do |item|
         reduced_transaction << item if transaction.include?(item)
@@ -99,5 +101,4 @@ class DataSet
     end
     transactions
   end
-
 end

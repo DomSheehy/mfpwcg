@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DataSet do
   describe '#create' do
     it 'should create a new dataset' do
-      raw_parsed_data = DataTools::token_file(File.dirname(__FILE__)+'/../data/parse_test.txt', ',')
+      raw_parsed_data = DataTools.token_file(File.dirname(__FILE__) + '/../data/parse_test.txt', ',')
       ds_support = 2
       dataset = DataSet.new(raw_parsed_data, 2)
       expect(dataset.raw_transactions).to eq(raw_parsed_data)
@@ -27,7 +27,7 @@ describe DataSet do
       dataset.add_and_support
       item_index = dataset.search_item_list('a')
       expect(dataset.item_list[item_index].support).to eq(3)
-     end
+    end
   end
 
   describe '#trim' do
@@ -43,7 +43,7 @@ describe DataSet do
       expect(dataset.item_list[item_index].support).to eq(3)
       item_index = dataset.search_item_list('e')
       expect(item_index).to be(nil)
-     end
+    end
   end
 
   describe '#ordered_item_list' do
@@ -53,7 +53,7 @@ describe DataSet do
       dataset.trim
       list = dataset.ordered_item_list
       i = 0
-      test_list = ['f', 'c', 'a', 'b', 'm', 'p']
+      test_list = %w(f c a b m p)
       list.each do |node|
         (node).should eq(test_list[i])
         i += 1
@@ -67,20 +67,20 @@ describe DataSet do
       dataset.add_and_support
       dataset.trim
       expect(dataset.order_transaction_items).to eq(
-        [['f', 'c', 'a', 'm', 'p'],
-         ['f', 'c', 'a', 'b', 'm'],
-         ['f', 'b'],
-         ['c', 'b', 'p'],
-         ['f', 'c', 'a', 'm', 'p']])
+        [%w(f c a m p),
+         %w(f c a b m),
+         %w(f b),
+         %w(c b p),
+         %w(f c a m p)])
     end
   end
   describe '#transactions_from_pattern_base' do
     before do
-      first_pattern = [ItemNode.new('f', 2),ItemNode.new('c', 2),ItemNode.new('a', 2),ItemNode.new('m', 2)]
-      second_pattern = [ItemNode.new('c', 1),ItemNode.new('b', 1)]
+      first_pattern = [ItemNode.new('f', 2), ItemNode.new('c', 2), ItemNode.new('a', 2), ItemNode.new('m', 2)]
+      second_pattern = [ItemNode.new('c', 1), ItemNode.new('b', 1)]
       @conditional_pattern = [first_pattern, second_pattern]
-      first_pattern_result = [['f','c','a','m'],['f','c','a','m']]
-      second_pattern_result = ['c','b']
+      first_pattern_result = [%w(f c a m), %w(f c a m)]
+      second_pattern_result = %w(c b)
       @expected_result = first_pattern_result << second_pattern_result
     end
     it 'will return a set of transactions based on the conditional pattern base' do

@@ -20,7 +20,7 @@ RSpec.configure do |config|
 end
 
 def setup_dataset
-  raw_parsed_data = DataTools::token_file(File.dirname(__FILE__)+'/../data/paperex.txt', ',')
+  raw_parsed_data = DataTools.token_file(File.dirname(__FILE__) + '/../data/paperex.txt', ',')
   ds_support = 3
   DataSet.new(raw_parsed_data, ds_support)
 end
