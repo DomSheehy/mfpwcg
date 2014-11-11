@@ -108,9 +108,9 @@ class SubTreeNode
         if i < children.length
           print "\n #{depth}"
           0..depth.times {print "\t\t\t\t"}
-          print "|"
+          print '|'
         else
-          puts ""
+          puts ''
         end
       end
     end

@@ -126,7 +126,7 @@ class FPTree
     if root.children
       puts " - root : #{root.children.length} - "
       root.children.each{|child| child.print_node}
-      puts ""
+      puts ''
     end
   end
 end
