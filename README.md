@@ -1,4 +1,4 @@
-mfpwcg
+mfpwcg [![Build Status](https://travis-ci.org/DomSheehy/mfpwcg.svg?branch=master)](https://travis-ci.org/DomSheehy/mfpwcg)
 ======
 
 Mining Frequent Patterns without Candidate Generation in Ruby
