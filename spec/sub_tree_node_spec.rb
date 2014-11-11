@@ -13,21 +13,21 @@ describe SubTreeNode do
     end
     it 'should raise an error if the data types are wrong' do
       begin
-        node = SubTreeNode.new('cat')
+        SubTreeNode.new('cat')
       rescue => e
         expect(e.class).to eq(TypeError)
       end
     end
     it 'should raise an error if the the node isnt a node' do
       begin
-        node = SubTreeNode.new(ItemNode.new('cat', 0), 'dog', SubTreeNode.new('cats', 0, nil, nil))
+        SubTreeNode.new(ItemNode.new('cat', 0), 'dog', SubTreeNode.new('cats', 0, nil, nil))
       rescue => e
         expect(e.class).to eq(TypeError)
       end
     end
     it 'should raise an error if the the link isnt a link' do
       begin
-        node = SubTreeNode.new(ItemNode.new('cat', 0), SubTreeNode.new('cats', 0, nil, nil), 'doge')
+        SubTreeNode.new(ItemNode.new('cat', 0), SubTreeNode.new('cats', 0, nil, nil), 'doge')
       rescue => e
         expect(e.class).to eq(TypeError)
       end

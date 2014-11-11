@@ -85,7 +85,7 @@ class SubTreeNode
 
   def remove_child(node)
     children.each do |child|
-      child = nil if child.item == node.item
+      self.child = nil if child.item == node.item
     end
     children.compact!
   end

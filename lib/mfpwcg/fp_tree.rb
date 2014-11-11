@@ -72,7 +72,7 @@ class FPTree
     conditional_pattern_base(trim, current_link.link, current_pattern_base)
   end
 
-  def has_single_path?
+  def single_path?
     if header_table.size > 0
       header_table.each do |header|
         return false if header.link_depth != 1
@@ -85,7 +85,7 @@ class FPTree
   # trees based on the items conditional patterns
   def self.fp_growth(tree, pattern = '')
     frequent_patterns = []
-    if tree.has_single_path?
+    if tree.single_path?
       link = tree.header_table.reverse.first.link # the least frequent item
       single_pattern = link.parent.conditional_pattern(true,
                                                        tree.dataset.support,

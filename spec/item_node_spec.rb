@@ -8,7 +8,7 @@ describe ItemNode do
     end
     it 'should raise an error if the data types are wrong' do
       begin
-        node = ItemNode.new(0, 'cats')
+        ItemNode.new(0, 'cats')
       rescue => e
         expect(e.class).to eq(TypeError)
       end

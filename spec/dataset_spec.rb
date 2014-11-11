@@ -14,7 +14,7 @@ describe DataSet do
       raw_parsed_data = 'cats'
       ds_support = 'dogs'
       begin
-        dataset = DataSet.new(raw_parsed_data, ds_support)
+        DataSet.new(raw_parsed_data, ds_support)
       rescue => e
         expect(e.class).to eq(TypeError)
       end

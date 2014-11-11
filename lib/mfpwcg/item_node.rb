@@ -17,9 +17,9 @@ class ItemNode
     @support -= decrease_by
   end
 
-  def ==(other_node)
-    other_node.class == self.class &&
-      other_node.support == support &&
-      other_node.item == item
+  def ==(other)
+    other.class == self.class &&
+      other.support == support &&
+      other.item == item
   end
 end
