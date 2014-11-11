@@ -98,8 +98,8 @@ class SubTreeNode
         child.print_node(depth + 1)
         i += 1
         if i < children.length
-          print "\n #{depth}"
-          0..depth.times { print "\t\t\t\t" }
+          print "\n depth: #{depth}"
+          0..depth.times { print "\t" }
           print '|'
         else
           puts ''
