@@ -33,14 +33,14 @@ class FPTree
     frequent_items.each do | item_node |
       headers << SubTreeNode.new(ItemNode.new(item_node, 0 ))
     end
-    self.header_table = headers
+    header_table = headers
   end
   #Grows the tree one transaction at a time
   def grow_tree
-    self.dataset.order_transaction_items(self.candidate_items).each do |transaction|
-      add_transaction(transaction, self.root)
+    dataset.order_transaction_items(candidate_items).each do |transaction|
+      add_transaction(transaction, root)
     end
-    self.calculate_header_support
+    calculate_header_support
   end
   #Add a transaction to the fp tree (this is done recursively each item is it's predecessor's child)
   def add_transaction(transaction, parent)
@@ -55,7 +55,7 @@ class FPTree
   #Add a link for the header table
   def add_link(child)
     if child.support == 1 #leaf in a new branch
-      self.header_table.each do |header|
+      header_table.each do |header|
         if header.item == child.item
           return header.add_link(child)
         end
@@ -65,7 +65,7 @@ class FPTree
 
   #How many of this item do i have in the dataset
   def calculate_header_support
-    self.header_table.each do |header|
+    header_table.each do |header|
       header.support = header.link.item_support
     end
   end
@@ -73,16 +73,16 @@ class FPTree
   #A conditional pattern is a group of frequent transactions related to the item (current link)
   def conditional_pattern_base(trim, current_link, current_pattern_base = [])
     if current_link.nil?
-      self.calculate_header_support if trim
+      calculate_header_support if trim
       return current_pattern_base
     end
     current_pattern_base << current_link.parent.conditional_pattern(trim, current_link.support)
-    self.conditional_pattern_base(trim, current_link.link, current_pattern_base)
+    conditional_pattern_base(trim, current_link.link, current_pattern_base)
   end
 
   def has_single_path?
-    if self.header_table.size > 0
-      self.header_table.each do |header|
+    if header_table.size > 0
+      header_table.each do |header|
         if header.link_depth != 1
           return false
         end
