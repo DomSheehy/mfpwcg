@@ -12,9 +12,8 @@ class DataSet
 
   # Assume that raw_transactions is an array of arrays of strings, support is a fixnum(int)
   def initialize(raw_transactions, support = 0)
-    if raw_transactions.class != Array || support.class != Fixnum
-      fail TypeError
-    end
+    fail TypeError if raw_transactions.class != Array || support.class != Fixnum
+
     @raw_transactions = raw_transactions
     @support = support
     @item_list = []
@@ -64,9 +63,7 @@ class DataSet
     if candidate_items
       ordered_items = []
       candidate_items.each do |c_item|
-        if local_ordered_items.include?(c_item)
-          ordered_items << c_item
-        end
+        ordered_items << c_item if local_ordered_items.include?(c_item)
       end
     end
 

@@ -9,9 +9,8 @@ class FPTree
   attr_accessor :header_table, :root, :dataset, :candidate_items
 
   def initialize(dataset, candidate_items = nil)
-    if dataset && dataset.class != DataSet
-      fail TypeError
-    end
+    fail TypeError if dataset && dataset.class != DataSet
+
     @dataset, @candidate_items = FPTree.prepare_dataset(dataset, candidate_items)
     @root = SubTreeNode.new(ItemNode.new(nil, 0))
     @header_table = create_header_table(@dataset.ordered_item_list(@candidate_items))
@@ -21,9 +20,7 @@ class FPTree
   def self.prepare_dataset(dataset, candidate_items = nil)
     dataset.add_and_support
     dataset.trim
-    if candidate_items.nil?
-      candidate_items = dataset.ordered_item_list
-    end
+    candidate_items = dataset.ordered_item_list if candidate_items.nil?
     [dataset, candidate_items]
   end
   # Sets up the table header, most frequent first!
@@ -43,9 +40,7 @@ class FPTree
   end
   # Add a transaction to the fp tree (this is done recursively each item is it's predecessor's child)
   def add_transaction(transaction, parent)
-    if transaction.empty?
-      return
-    end
+    return if transaction.empty?
     added_child = parent.add_child(transaction.shift) # linked both to a parent and a child (root is the top)
     add_link(added_child) # for the header table
     add_transaction(transaction, added_child)
@@ -55,9 +50,7 @@ class FPTree
   def add_link(child)
     if child.support == 1 # leaf in a new branch
       header_table.each do |header|
-        if header.item == child.item
-          return header.add_link(child)
-        end
+        return header.add_link(child) if header.item == child.item
       end
     end
   end
@@ -82,9 +75,7 @@ class FPTree
   def has_single_path?
     if header_table.size > 0
       header_table.each do |header|
-        if header.link_depth != 1
-          return false
-        end
+        return false if header.link_depth != 1
       end
       true
     end

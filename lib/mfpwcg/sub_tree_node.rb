@@ -37,16 +37,12 @@ class SubTreeNode
   end
 
   def link_depth(depth = 0)
-    if link.nil?
-      return depth
-    end
+    return depth if link.nil?
     link.link_depth(depth + 1)
   end
 
   def item_support(total_support = 0)
-    if link.nil?
-      return support + total_support
-    end
+    return support + total_support if link.nil?
     link.item_support(support + total_support)
   end
 
@@ -78,9 +74,7 @@ class SubTreeNode
   end
 
   def conditional_pattern(trim, decrease_num, current_pattern = [])
-    if parent.nil? && item.nil?
-      return current_pattern.reverse
-    end
+    return current_pattern.reverse if parent.nil? && item.nil?
     decrease_support(decrease_num) if trim
     parent.conditional_pattern(trim, decrease_num, current_pattern << ItemNode.new(item, decrease_num))
   end
@@ -91,9 +85,7 @@ class SubTreeNode
 
   def remove_child(node)
     children.each do |child|
-      if child.item == node.item
-        child = nil
-      end
+      child = nil if child.item == node.item
     end
     children.compact!
   end
